@@ -1,6 +1,6 @@
 # Agents From Scratch
 
-A production-style AI Agent built from first principles.
+AI Agent built from first principles.
 No LangChain. No LangGraph. Just Python, Groq, and a loop.
 
 ---
@@ -98,5 +98,5 @@ python 04_multi_tool_agent.py
 
 ## Author
 
-Shibli | Hyderabad, India
+Shibli |
 [@BuildwithShibli](https://twitter.com/BuildwithShibli) · [github.com/shiblimaroof](https://github.com/shiblimaroof)
