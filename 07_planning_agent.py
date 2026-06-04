@@ -685,7 +685,7 @@ def main() -> None:
     # ── KEY INSIGHT ───────────────────────────────────────────────────────────
     print("  Key insight:")
     #print("  ┌─────────────────────────────────────────────────────────────┐")
-    print("  │ Low adherence + high faithfulness = replanning worked well  │")
+    print("   Low adherence + high faithfulness = replanning worked well  ")
     print("   Low adherence + low  faithfulness = replanning also failed  ")
     #print("  └─────────────────────────────────────────────────────────────┘\n")
  

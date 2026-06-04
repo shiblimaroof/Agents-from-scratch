@@ -24,7 +24,7 @@ def load_generation():
     spec.loader.exec_module(gen)
     return gen
 
-print('[info] Loading RAG pipelimne')
+print('[info] Loading RAG pipeline')
 gen = load_generation()
 
 # ── Tools ────────────────────────────────────────────────────────────────────────────────────────
