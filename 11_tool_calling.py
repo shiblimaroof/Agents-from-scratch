@@ -34,6 +34,7 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 from typing_extensions import TypedDict
 
+
 load_dotenv()
 
 #Optional RAG
@@ -143,22 +144,22 @@ Use tools when needed. You may call multiple tools in parallel if the question
 requires information from more than one source. When you have enough information,
 provide a clear, accurate answer without calling any more tools."""
 
-def agent_node(state: AgentState) ->dict:
-    """
-    Calls the LLM with the full message history.
-    SystemMessage is injected once in run() — not here — so it doesn't
-    duplicate on every turn when a checkpointer is attached.
-    LLM decides whether to emit tool_calls or produce a final answer.
-    If tool_calls present → ToolNode runs next.
-    If no tool_calls → END.
-    """
-    
+def agent_node(state: AgentState) -> dict:
     t0 = time.time()
-
-    response = llm_with_tools.invoke(state["messages"])
-
+    
+    for attempt in range(3):
+        try:
+            response = llm_with_tools.invoke(state["messages"])
+            break
+        except Exception as e:
+            if "tool_use_failed" in str(e) and attempt < 2:
+                print(f"  [Agent]    tool_use_failed, retrying ({attempt + 1}/3)...")
+                time.sleep(0.5)
+            else:
+                raise
+    
     tool_calls = getattr(response, "tool_calls", [])
-    latency = int((time.time() - t0) *1000)
+    latency = int((time.time() - t0) * 1000)
 
     if tool_calls:
         tool_names = [tc["name"] for tc in tool_calls]
@@ -166,8 +167,7 @@ def agent_node(state: AgentState) ->dict:
     else:
         print(f"  [Agent]    final answer  ({latency}ms)")
 
-    return {"messages" : [response]}
-
+    return {"messages": [response]}
 # ─────────────────────────────────────────────────────────────────────────────
 # Routing
 # ─────────────────────────────────────────────────────────────────────────────
