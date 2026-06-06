@@ -33,6 +33,7 @@ from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 from typing_extensions import TypedDict
+from ddgs import DDGS
 
 
 load_dotenv()
