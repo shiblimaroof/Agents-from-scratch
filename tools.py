@@ -31,11 +31,13 @@ load_dotenv()
 import importlib.util
 
 def load_generation():
-    gen_path = os.path.join(
-        os.path.dirname(os.getcwd()),
+    gen_path = os.path.normpath(os.path.join(
+        os.path.dirname(__file__),
+        "..",
         "rag_pipeline",
         "generation.py"
-    )
+    ))
+
     if not os.path.exists(gen_path):
         print(f"[warn] generation.py not found at {gen_path}")
         print("[warn] Using mock RAG instead")
@@ -72,10 +74,16 @@ def rag_search(query: str) -> str:
     else:
         # fallback mock
         knowledge = {
-            "attention": "Scaled dot-product attention: Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) * V",
-            "transformer": "Transformer uses self-attention to process tokens in parallel.",
-            "distilbert": "DistilBERT is a smaller, faster BERT with 66M parameters.",
-            "lora": "LoRA injects low-rank matrices into attention layers for efficient fine-tuning.",
+            "attention":    "Scaled dot-product attention: Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) * V",
+            "transformer":  "Transformer uses self-attention to process tokens in parallel.",
+            "distilbert":   "DistilBERT is a smaller, faster BERT with 66M parameters.",
+            "lora":         "LoRA injects low-rank matrices into attention layers for efficient fine-tuning.",
+            "bm25":         "BM25 is a sparse retrieval method based on TF-IDF term weighting with document length normalisation.",
+            "faiss":        "FAISS performs approximate nearest neighbour search via IVF or HNSW indexing of dense vectors.",
+            "dense":        "Dense retrieval uses bi-encoder models to embed queries and documents into shared vector spaces.",
+            "hybrid":       "Hybrid search combines BM25 sparse retrieval with dense vector search, re-ranked by a cross-encoder.",
+            "langgraph":    "LangGraph models agent workflows as typed state machines with conditional routing between nodes.",
+            "rag":          "RAG combines retrieval and generation — retrieved context grounds the LLM output and reduces hallucination.",
         }
         for key, value in knowledge.items():
             if key in query.lower():
